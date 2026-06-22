@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🚀 AI Resume Bullet Generator Pro</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+min-height:100vh;
+padding:20px;
+}
+
+.container{
+max-width:1400px;
+margin:auto;
+}
+
+.header{
+text-align:center;
+margin-bottom:25px;
+}
+
+.header h1{
+color:#38bdf8;
+margin-bottom:10px;
+}
+
+.header p{
+color:#cbd5e1;
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:380px 1fr;
+gap:20px;
+}
+
+.panel{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 15px rgba(0,0,0,.25);
+}
+
+.panel h2{
+margin-bottom:15px;
+color:#38bdf8;
+}
+
+label{
+display:block;
+margin-top:14px;
+margin-bottom:6px;
+font-size:14px;
+}
+
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+font-size:15px;
+}
+
+textarea{
+resize:none;
+height:110px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:18px;
+border:none;
+border-radius:10px;
+background:#38bdf8;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#0ea5e9;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-bottom:20px;
+}
+
+.stat-card{
+background:#1e293b;
+padding:15px;
+border-radius:12px;
+text-align:center;
+}
+
+.stat-card h3{
+font-size:14px;
+margin-bottom:10px;
+color:#38bdf8;
+}
+
+.stat-card p{
+font-size:24px;
+font-weight:bold;
+}
+
+.result-card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 0 15px rgba(0,0,0,.25);
+}
+
+.result-card h2{
+color:#38bdf8;
+margin-bottom:15px;
+}
+
+.output-box{
+background:#334155;
+padding:15px;
+border-radius:10px;
+line-height:1.8;
+white-space:pre-wrap;
+min-height:220px;
+}
+
+.keyword-box{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.keyword{
+background:#38bdf8;
+padding:8px 12px;
+border-radius:20px;
+font-size:14px;
+word-break:break-word;
+}
+
+.action-buttons{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:15px;
+}
+
+.secondary-btn{
+background:#22c55e;
+}
+
+.secondary-btn:hover{
+background:#16a34a;
+}
+
+.footer{
+text-align:center;
+margin-top:20px;
+color:#94a3b8;
+font-size:13px;
+}
+
+.placeholder{
+text-align:center;
+padding:70px 20px;
+color:#94a3b8;
+}
+
+.progress{
+height:20px;
+background:#334155;
+border-radius:10px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.bar{
+height:100%;
+width:0%;
+background:#22c55e;
+transition:.8s;
+}
+
+@media(max-width:900px){
+
+.dashboard{
+grid-template-columns:1fr;
+}
+
+.stats{
+grid-template-columns:1fr;
+}
+
+.action-buttons{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h1>🚀 AI Resume Bullet Generator Pro</h1>
+
+<p>
+Transform simple work descriptions into professional ATS-friendly resume bullets.
+</p>
+
+</div>
+
+<div class="dashboard">
+
+<div class="panel">
+
+<h2>Enter Details</h2>
+
+<label>Job Role</label>
+<input
+type="text"
+id="role"
+placeholder="e.g. Data Science Intern">
+
+<label>Task Performed</label>
+<textarea
+id="task"
+placeholder="Describe the work you performed..."></textarea>
+
+<label>Impact / Achievement</label>
+<textarea
+id="impact"
+placeholder="Describe measurable results..."></textarea>
+
+<label>Technologies Used</label>
+<input
+type="text"
+id="technology"
+placeholder="Python, SQL, Pandas">
+
+<label>Experience Level</label>
+
+<select id="level">
+
+<option value="">Select Level</option>
+
+<option>Intern</option>
+<option>Beginner</option>
+<option>Intermediate</option>
+<option>Advanced</option>
+
+</select>
+
+<button onclick="generateResumeBullet()">
+🚀 Generate Resume Bullet
+</button>
+
+</div>
+
+<div>
+
+<div class="stats">
+
+<div class="stat-card">
+<h3>ATS Score</h3>
+<p id="atsScore">--</p>
+</div>
+
+<div class="stat-card">
+<h3>Resume Strength</h3>
+<p id="strength">--</p>
+</div>
+
+<div class="stat-card">
+<h3>Keyword Count</h3>
+<p id="keywordCount">--</p>
+</div>
+
+</div>
+
+<div class="result-card">
+
+<h2>📄 Professional Resume Bullets</h2>
+
+<div id="resumeOutput" class="output-box">
+
+<div class="placeholder">
+Generated resume bullets will appear here...
+</div>
+
+</div>
+
+<div class="action-buttons">
+
+<button
+class="secondary-btn"
+onclick="copyBullets()">
+
+📋 Copy
+
+</button>
+
+<button
+onclick="downloadBullets()">
+
+⬇ Download
+
+</button>
+
+</div>
+
+</div>
+
+<div class="result-card">
+
+<h2>🎯 ATS Keywords</h2>
+
+<div
+id="keywordBox"
+class="keyword-box">
+
+<div class="placeholder">
+Keywords will appear here...
+</div>
+
+</div>
+
+</div>
+
+<div class="result-card">
+
+<h2>💡 AI Suggestions</h2>
+
+<div
+id="suggestionsBox"
+class="output-box">
+
+Suggestions will appear here...
+
+</div>
+
+</div>
+
+<div class="result-card">
+
+<h2>📊 ATS Optimization Score</h2>
+
+<div class="progress">
+
+<div
+id="scoreBar"
+class="bar">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+Day 14 • 30 Days 30 AI Websites Challenge
+
+</div>
+
+</div>
+
+<!-- PART-2 JavaScript starts below -->
+<script>
+
+let generatedResumeBullets = "";
+let currentRole = "";
+
+function generateResumeBullet(){
+
+const role =
+document.getElementById("role").value.trim();
+
+const task =
+document.getElementById("task").value.trim();
+
+const impact =
+document.getElementById("impact").value.trim();
+
+const technology =
+document.getElementById("technology").value.trim();
+
+const level =
+document.getElementById("level").value;
+
+if(
+role === "" ||
+task === "" ||
+impact === "" ||
+technology === "" ||
+level === ""
+){
+alert("Please fill all fields.");
+return;
+}
+
+currentRole = role;
+
+/* =========================
+   KEYWORD ENGINE
+========================= */
+
+let keywords = [];
+
+const techList =
+technology
+.split(",")
+.map(item => item.trim())
+.filter(item => item !== "");
+
+keywords.push(...techList);
+
+const combinedText =
+(
+role + " " +
+task + " " +
+impact + " " +
+technology
+).toLowerCase();
+
+const keywordMap = {
+
+python:[
+"Python",
+"Pandas",
+"NumPy",
+"Data Analysis",
+"Automation"
+],
+
+sql:[
+"SQL",
+"Database",
+"Query Optimization"
+],
+
+machine:[
+"Machine Learning",
+"AI",
+"Model Building",
+"Prediction"
+],
+
+javascript:[
+"JavaScript",
+"Frontend Development",
+"Web Applications"
+],
+
+react:[
+"React",
+"Component Design",
+"State Management"
+],
+
+node:[
+"Node.js",
+"Backend Development",
+"API Integration"
+],
+
+aws:[
+"AWS",
+"Cloud Computing",
+"Deployment"
+],
+
+excel:[
+"Excel",
+"Reporting",
+"Dashboard"
+],
+
+powerbi:[
+"Power BI",
+"Business Intelligence",
+"Visualization"
+],
+
+tableau:[
+"Tableau",
+"Data Visualization",
+"Analytics"
+],
+
+git:[
+"Git",
+"Version Control",
+"GitHub"
+],
+
+security:[
+"Cyber Security",
+"Risk Assessment",
+"Security Testing"
+]
+
+};
+
+for(let key in keywordMap){
+
+if(combinedText.includes(key)){
+
+keywords.push(
+...keywordMap[key]
+);
+
+}
+
+}
+
+keywords =
+[...new Set(keywords)];
+
+/* =========================
+   ATS SCORE
+========================= */
+
+let atsScore = 40;
+
+if(task.length > 30)
+atsScore += 15;
+
+if(task.length > 80)
+atsScore += 10;
+
+if(impact.length > 20)
+atsScore += 15;
+
+if(impact.length > 60)
+atsScore += 10;
+
+if(keywords.length >= 5)
+atsScore += 10;
+
+if(level === "Intermediate")
+atsScore += 5;
+
+if(level === "Advanced")
+atsScore += 10;
+
+if(atsScore > 100)
+atsScore = 100;
+
+/* =========================
+   RESUME STRENGTH
+========================= */
+
+let strength = "";
+
+if(atsScore >= 90){
+
+strength = "Excellent";
+
+}
+else if(atsScore >= 75){
+
+strength = "Strong";
+
+}
+else if(atsScore >= 60){
+
+strength = "Good";
+
+}
+else{
+
+strength = "Average";
+
+}
+
+/* =========================
+   BULLET GENERATOR
+========================= */
+
+const formattedTask =
+task.charAt(0).toUpperCase() +
+task.slice(1);
+
+const formattedImpact =
+impact.charAt(0).toLowerCase() +
+impact.slice(1);
+
+generatedResumeBullets = `
+
+• ${formattedTask}, demonstrating strong capabilities as a ${role}.
+
+• Utilized ${technology} to improve efficiency, accuracy, and overall project outcomes.
+
+• Achieved measurable impact by ${formattedImpact}.
+
+• Collaborated effectively to deliver objectives while maintaining quality and performance standards.
+
+• Applied analytical and problem-solving skills to support continuous improvement initiatives.
+
+`;
+
+document.getElementById(
+"resumeOutput"
+).innerHTML =
+generatedResumeBullets;
+
+/* =========================
+   KEYWORDS DISPLAY
+========================= */
+
+document.getElementById(
+"keywordBox"
+).innerHTML =
+keywords.map(keyword =>
+
+`<div class="keyword">
+${keyword}
+</div>`
+
+).join("");
+
+/* =========================
+   STATS
+========================= */
+
+document.getElementById(
+"atsScore"
+).innerText =
+atsScore + "/100";
+
+document.getElementById(
+"strength"
+).innerText =
+strength;
+
+document.getElementById(
+"keywordCount"
+).innerText =
+keywords.length;
+
+/* =========================
+   PROGRESS BAR
+========================= */
+
+const bar =
+document.getElementById(
+"scoreBar"
+);
+
+bar.style.width =
+atsScore + "%";
+
+if(atsScore < 60){
+
+bar.style.background =
+"#ef4444";
+
+}
+else if(atsScore < 80){
+
+bar.style.background =
+"#f59e0b";
+
+}
+else{
+
+bar.style.background =
+"#22c55e";
+
+}
+
+/* =========================
+   AI SUGGESTIONS
+========================= */
+
+let suggestions = [];
+
+if(keywords.length < 5){
+
+suggestions.push(
+"Add more technical skills and tools."
+);
+
+}
+
+if(impact.length < 25){
+
+suggestions.push(
+"Include measurable achievements using percentages, revenue, time savings, or performance improvements."
+);
+
+}
+
+if(level === "Intern"){
+
+suggestions.push(
+"Highlight projects, internships, certifications, and technologies used."
+);
+
+}
+
+if(level === "Beginner"){
+
+suggestions.push(
+"Add project outcomes and quantifiable results."
+);
+
+}
+
+if(suggestions.length === 0){
+
+suggestions.push(
+"Your resume bullets look strong and ATS-friendly."
+);
+
+suggestions.push(
+"Continue adding measurable achievements and technical skills."
+);
+
+}
+
+document.getElementById(
+"suggestionsBox"
+).innerHTML =
+
+suggestions
+.map(item => `• ${item}`)
+.join("<br>");
+
+}
+
+/* =========================
+   COPY BUTTON
+========================= */
+
+function copyBullets(){
+
+if(
+generatedResumeBullets === ""
+){
+alert(
+"Generate resume bullets first."
+);
+return;
+}
+
+navigator.clipboard
+.writeText(
+generatedResumeBullets
+)
+.then(() => {
+
+alert(
+"Resume bullets copied."
+);
+
+})
+.catch(() => {
+
+alert(
+"Copy failed."
+);
+
+});
+
+}
+
+/* =========================
+   DOWNLOAD BUTTON
+========================= */
+
+function downloadBullets(){
+
+if(
+generatedResumeBullets === ""
+){
+alert(
+"Generate resume bullets first."
+);
+return;
+}
+
+const blob =
+new Blob(
+[
+generatedResumeBullets
+],
+{
+type:"text/plain"
+}
+);
+
+const link =
+document.createElement("a");
+
+link.href =
+URL.createObjectURL(blob);
+
+const safeRole =
+currentRole
+.replace(/\s+/g,"_");
+
+link.download =
+safeRole +
+"_Resume_Bullets.txt";
+
+link.click();
+
+URL.revokeObjectURL(
+link.href
+);
+
+}
+
+</script>
+
+</body>
+</html>
